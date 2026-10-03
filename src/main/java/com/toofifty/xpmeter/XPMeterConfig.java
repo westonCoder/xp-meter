@@ -554,7 +554,7 @@ public interface XPMeterConfig extends Config
 	}
 
 	@ConfigItem(
-		name = "Scroll to zoom",
+		name = "Shift + Scroll to zoom",
 		keyName = "scrollZoom",
 		description = "Hold Shift + scroll over the overlay to adjust the display span",
 		section = interactivity,
