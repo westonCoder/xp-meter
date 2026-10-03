@@ -26,6 +26,8 @@ public class XPMeterOverlay extends OverlayPanel
 	@Getter private final XPChart chart;
 	@Getter private boolean isMouseOver = false;
 
+	private XPMeterConfig config;
+
 	@Inject
 	private XPMeterOverlay(
 		SkillIconManager skillIconManager,
@@ -33,6 +35,7 @@ public class XPMeterOverlay extends OverlayPanel
 		XPChart chart
 	)
 	{
+		this.config = config;
 		this.chart = chart;
 		if (getPreferredSize() == null)
 		{
@@ -104,11 +107,19 @@ public class XPMeterOverlay extends OverlayPanel
 		}
 		else
 		{
-			panelComponent.getChildren().add(
+			if (config.hideNoXP())
+			{
+				isMouseOver = false;
+				return new Dimension(0, 0);
+			}
+			else
+			{
+				panelComponent.getChildren().add(
 				LineComponent.builder()
 					.left("XP Meter inactive")
 					.build()
-			);
+				);
+			}
 		}
 
 		// onMouseOver() is called each frame immediately after render,

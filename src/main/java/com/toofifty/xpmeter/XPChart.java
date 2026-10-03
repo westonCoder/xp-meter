@@ -77,8 +77,13 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 	// local data
 	private final Client client;
+	private final int significantRightMarginChangePositive = 4;
+	private final int significantRightMarginChangeNegative = -16;
 	private int screenY;
 	private Skill hoveredSkill = null;
+	private int lastRightMarginWidth = 0;
+
+	
 
 	@Inject
 	public XPChart(Client client)
@@ -660,7 +665,22 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 			? width(ticksToTime(currentTick)) / 2
 			: 0;
 
-		return Math.max(currentRateWidth, currentTimeWidth);
+		int currentMargin = Math.max(currentRateWidth, currentTimeWidth);
+		int marginDifferential = currentMargin - lastRightMarginWidth;
+
+		// If right margin width change is significant, update.
+		if (marginDifferential > significantRightMarginChangePositive ||
+			marginDifferential < significantRightMarginChangeNegative
+		)
+		{
+			lastRightMarginWidth = currentMargin;
+			return currentMargin;
+		}
+		// else keep original right margin width
+		else
+		{
+			return lastRightMarginWidth;
+		}
 	}
 
 	@Override

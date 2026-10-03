@@ -487,11 +487,23 @@ public interface XPMeterConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Hide without XP data",
+		keyName = "hideNoXP",
+		description = "Hide widget when no XP data is present",
+		section = display,
+		position = 11
+	)
+	default boolean hideNoXP()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		name = "Theme",
 		keyName = "theme",
 		description = "Change the appearance of the overlay",
 		section = display,
-		position = 11
+		position = 12
 	)
 	default Theme theme()
 	{
