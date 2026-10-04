@@ -635,7 +635,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 			for (var rates : skillXpHistories.values())
 			{
 				final var last = rates.get(rates.size() - 1);
-				if (last == null)
+				if (last == null || last.getY() == 0)
 				{
 					continue;
 				}
