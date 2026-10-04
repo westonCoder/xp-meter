@@ -97,6 +97,18 @@ public class XPMeterOverlay extends OverlayPanel
 		setPreferredColor(color);
 	}
 
+	private void updateMouse()
+	{
+		final var bounds = getBounds();
+		final var canvas = client.getMouseCanvasPosition();
+		isMouseOver = bounds.contains(canvas.getX(), canvas.getY());
+		final var mouse = new Point(
+			canvas.getX() - bounds.x,
+			canvas.getY() - bounds.y
+		);
+		chart.setMouse(mouse);
+	}
+
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
@@ -122,10 +134,7 @@ public class XPMeterOverlay extends OverlayPanel
 			}
 		}
 
-		// onMouseOver() is called each frame immediately after render,
-		// so we can flick off the value for it to be re-set immediately
-		// (if mouse is hovering)
-		isMouseOver = false;
+		updateMouse();
 
 		return super.render(graphics);
 	}
@@ -133,15 +142,6 @@ public class XPMeterOverlay extends OverlayPanel
 	@Override
 	public void onMouseOver()
 	{
-		isMouseOver = true;
-
-		final var bounds = getBounds();
-		final var canvas = client.getMouseCanvasPosition();
-		final var mouse = new Point(
-			canvas.getX() - bounds.x,
-			canvas.getY() - bounds.y
-		);
-
-		chart.setMouse(mouse);
+		updateMouse();
 	}
 }
