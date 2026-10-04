@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import lombok.Setter;
 import net.runelite.api.Client;
+import net.runelite.api.Experience;
 import net.runelite.api.Skill;
 import net.runelite.client.game.SkillIconManager;
 import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
@@ -30,7 +31,8 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	private static final int TIME_LABEL_TPAD = 2;
 	private static final int TIME_LABEL_SPACING = 4;
 	private static final int XP_LABEL_RPAD = 2;
-	private static final int STACKED_RATE_GAP = 3;
+	private static final int STACKED_RATE_GAP = 5;
+	private static final int PROGRESS_BAR_HEIGHT = 2;
 
 	private static final int XP_TOOLTIP_LPAD = 8;
 
@@ -73,6 +75,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	@Setter private boolean showHoverTooltips = true;
 	@Setter private boolean dimNonHoveredSkills = true;
 	@Setter private boolean showAllHovers = false;
+	@Setter private boolean showLevelProgressBars = true;
 	@Setter private Theme theme = Theme.RUNELITE;
 
 	// local data
@@ -263,6 +266,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 				var x = baseX;
 
 				final var boxHeight = fontHeight + 2;
+				int progressWidth = 0;
 
 				// do not allow any rates to render under the chart
 				if (stackUp)
@@ -292,6 +296,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 				if (showSkillIcons)
 				{
+					progressWidth += SKILL_ICON_WIDTH + theme.rateMargin;
 					final var icon = skillIconManager.getSkillImage(skill, true);
 
 					if (stackUp)
@@ -325,6 +330,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 				if (showCurrentRates)
 				{
+					progressWidth += width(rate) + theme.ratePadding * 2;
 					final var padding = theme.ratePadding;
 					x += padding;
 
@@ -371,6 +377,15 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 					drawText(rate, x, y + fontHeight / 2, true);
 				}
+			if (showLevelProgressBars)
+			{
+				drawLevelProgress(
+					skill,
+					baseX,
+					y + boxHeight / 2 + 1,
+					progressWidth
+				);
+			}
 			}
 		}
 	}
@@ -470,6 +485,29 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 		}
 
 		drawText(text, 0, y, true);
+	}
+
+	private void drawLevelProgress(Skill skill, int x, int y, int width)
+	{
+		final var level = client.getRealSkillLevel(skill);
+
+		if (level >= 99)
+		{
+			return;
+		}
+
+		final var currentXp = client.getSkillExperience(skill);
+		final var levelXp = Experience.getXpForLevel(level);
+		final var nextLevelXp = Experience.getXpForLevel(level + 1);
+
+		final var progress = (double) (currentXp - levelXp) / (nextLevelXp - levelXp);
+		final var progressWidth = (int) (width * progress);
+
+		setColor(Color.BLACK);
+		fillRect(x, y, width, PROGRESS_BAR_HEIGHT);
+
+		setColor(getSkillColor(skill));
+		fillRect(x, y, progressWidth, PROGRESS_BAR_HEIGHT);
 	}
 
 	public void drawMouseOver()

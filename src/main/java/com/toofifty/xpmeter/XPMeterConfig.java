@@ -499,11 +499,23 @@ public interface XPMeterConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Show level progress bars",
+		keyName = "showLevelProgressBars",
+		description = "Show level progress when current rates or skill icons are present",
+		section = display,
+		position = 12
+	)
+	default boolean showLevelProgressBars()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		name = "Theme",
 		keyName = "theme",
 		description = "Change the appearance of the overlay",
 		section = display,
-		position = 12
+		position = 13
 	)
 	default Theme theme()
 	{
