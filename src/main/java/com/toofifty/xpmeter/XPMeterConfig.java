@@ -384,7 +384,7 @@ public interface XPMeterConfig extends Config
 		section = display
 	)
 	@Range(min = 10,
-		   max = 200)
+		   max = 500)
 	default int chartHeight()
 	{
 		return 60;

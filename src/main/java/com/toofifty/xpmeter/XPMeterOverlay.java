@@ -13,6 +13,7 @@ import net.runelite.client.game.SkillIconManager;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.LineComponent;
+import net.runelite.client.config.ConfigManager;
 
 @Singleton
 public class XPMeterOverlay extends OverlayPanel
@@ -22,11 +23,13 @@ public class XPMeterOverlay extends OverlayPanel
 
 	@Inject private XPTracker tracker;
 	@Inject private Client client;
+	@Inject private ConfigManager configManager;
 
 	@Getter private final XPChart chart;
 	@Getter private boolean isMouseOver = false;
 
 	private XPMeterConfig config;
+	private boolean initialized = false;
 
 	@Inject
 	private XPMeterOverlay(
@@ -56,6 +59,7 @@ public class XPMeterOverlay extends OverlayPanel
 		);
 
 		updateMenuEntries(config.enableDataMenuOptions());
+		initialized = true;
 	}
 
 	public void updateMenuEntries(boolean enableDataMenuOptions)
@@ -110,11 +114,28 @@ public class XPMeterOverlay extends OverlayPanel
 	}
 
 	@Override
+	public void setPreferredSize(Dimension size)
+	{
+		super.setPreferredSize(size);
+
+		if (initialized)
+		{
+			configManager.setConfiguration(
+				XPMeterConfig.GROUP_NAME,
+				"chartHeight",
+				Math.max(size.height, DEFAULT_HEIGHT)
+			);
+		}
+		
+	}
+
+	@Override
 	public Dimension render(Graphics2D graphics)
 	{
 		if (chart.hasData())
 		{
 			chart.setScreenY(getBounds().y);
+			chart.setChartHeight(config.chartHeight());
 			panelComponent.getChildren().add(chart);
 		}
 		else
