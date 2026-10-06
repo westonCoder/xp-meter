@@ -511,11 +511,23 @@ public interface XPMeterConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Show time to level",
+		keyName = "showTimeToLevel",
+		description = "Show time to level on hover when tooltip is present",
+		section = display,
+		position = 13
+	)
+	default boolean showTimeToLevel()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		name = "Theme",
 		keyName = "theme",
 		description = "Change the appearance of the overlay",
 		section = display,
-		position = 13
+		position = 14
 	)
 	default Theme theme()
 	{

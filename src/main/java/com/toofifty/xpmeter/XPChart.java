@@ -76,6 +76,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	@Setter private boolean dimNonHoveredSkills = true;
 	@Setter private boolean showAllHovers = false;
 	@Setter private boolean showLevelProgressBars = true;
+	@Setter private boolean showTimeToLevel = true;
 	@Setter private Theme theme = Theme.RUNELITE;
 
 	// local data
@@ -228,6 +229,32 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 				drawVMarker(mapX(timeTick));
 			}
 		}
+	}
+
+	private String getTimeToLevel(Skill skill, int xpPerHour)
+	{
+		final var level = client.getRealSkillLevel(skill);
+
+		if (level >= 99 || xpPerHour <= 0)
+		{
+			return "";
+		}
+
+		final var currentXp = client.getSkillExperience(skill);
+		final var nextLevelXp = Experience.getXpForLevel(level + 1);
+		final var remainingXp = nextLevelXp - currentXp;
+		final var seconds = (long) Math.ceil((double) remainingXp / xpPerHour * 3600);
+
+		final var hours = seconds / 3600;
+		final var minutes = (seconds % 3600) / 60;
+		final var remainingSeconds = seconds % 60;
+
+		if (hours > 0)
+		{
+			return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
+		}
+
+		return String.format("%02d:%02d", minutes, remainingSeconds);
 	}
 
 	// Based on chart location in client, determine stack direction.
@@ -575,7 +602,17 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 					continue;
 				}
 
-				final var label = skill.getName() + ": " + format(closest.y) + "/hr";
+				var label = skill.getName() + ": " + format(closest.y) + "/hr";
+
+				if (showTimeToLevel)
+				{
+					final var timeToLevel = getTimeToLevel(skill, closest.y);
+
+					if (!timeToLevel.isEmpty())
+					{
+						label += " - TTL: " + timeToLevel;
+					}
+				}	
 
 				if (stackUp)
 				{
@@ -604,7 +641,17 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 		if (!showAllHovers && closestSkill != null)
 		{
-			final var label = closestSkill.getName() + ": " + format(closestXp) + "/hr";
+			var label = closestSkill.getName() + ": " + format(closestXp) + "/hr";
+
+			if (showTimeToLevel)
+			{
+				final var timeToLevel = getTimeToLevel(closestSkill, closestXp);
+
+				if (!timeToLevel.isEmpty())
+				{
+					label += " - TTL: " + timeToLevel;
+				}
+			}
 
 			drawThemedTooltip(theme, x, closestY, label, getSkillColor(closestSkill));
 		}
