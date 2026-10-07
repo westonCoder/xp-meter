@@ -266,6 +266,21 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 		return chartCenterY > screenCenterY;
 	}
 
+	private boolean isMouseOnRightSide(int mouseX)
+	{
+		return mouseX > size.width / 2;
+	}
+
+	private int getTooltipX(int mouseX, String label)
+	{
+		if (isMouseOnRightSide(mouseX))
+		{
+			return mouseX - width(label) - XP_TOOLTIP_LPAD;
+		}
+
+		return mouseX + XP_TOOLTIP_LPAD;
+	}
+
 	private void drawCurrentRates()
 	{
 		if (!showCurrentRates && !showSkillIcons)
@@ -555,7 +570,6 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 		}
 
 		final var hoveredTick = unmapX(mx);
-		final var x = mx + XP_TOOLTIP_LPAD;
 
 		setColor(CURSOR_MARKER_COLOR);
 		drawVMarker(mx);
@@ -632,8 +646,13 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 					lastTooltipY = y + fontHeight / 2;
 				}
-
-				drawThemedTooltip(theme, x, y, label, getSkillColor(skill));
+				drawThemedTooltip(
+					theme,
+					getTooltipX(mx, label),
+					y,
+					label,
+					getSkillColor(skill)
+				);
 			}
 		}
 
@@ -652,8 +671,13 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 					label += " - TTL: " + timeToLevel;
 				}
 			}
-
-			drawThemedTooltip(theme, x, closestY, label, getSkillColor(closestSkill));
+			drawThemedTooltip(
+				theme,
+				getTooltipX(mx, label),
+				closestY,
+				label,
+				getSkillColor(closestSkill)
+			);
 		}
 	}
 
