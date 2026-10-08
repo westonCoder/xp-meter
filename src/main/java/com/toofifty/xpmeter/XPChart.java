@@ -77,6 +77,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	@Setter private boolean showAllHovers = false;
 	@Setter private boolean showLevelProgressBars = true;
 	@Setter private boolean showTimeToLevel = true;
+	@Setter private boolean showCurrentLevel = true;
 	@Setter private Theme theme = Theme.RUNELITE;
 
 	// local data
@@ -616,7 +617,14 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 					continue;
 				}
 
-				var label = skill.getName() + ": " + format(closest.y) + "/hr";
+				var label = skill.getName() + ": ";
+
+				if (showCurrentLevel)
+				{
+					label += client.getRealSkillLevel(skill) + " - ";
+				}
+
+				label += format(closest.y) + "/hr";
 
 				if (showTimeToLevel)
 				{
@@ -660,7 +668,14 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 		if (!showAllHovers && closestSkill != null)
 		{
-			var label = closestSkill.getName() + ": " + format(closestXp) + "/hr";
+			var label = closestSkill.getName() + ": ";
+
+			if (showCurrentLevel)
+			{
+				label += client.getRealSkillLevel(closestSkill) + " - ";
+			}
+
+			label += format(closestXp) + "/hr";
 
 			if (showTimeToLevel)
 			{

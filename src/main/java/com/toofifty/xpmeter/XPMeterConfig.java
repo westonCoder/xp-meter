@@ -523,11 +523,23 @@ public interface XPMeterConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Show current level",
+		keyName = "showCurrentLevel",
+		description = "Show current level on hover when tooltip is present",
+		section = display,
+		position = 14
+	)
+	default boolean showCurrentLevel()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		name = "Theme",
 		keyName = "theme",
 		description = "Change the appearance of the overlay",
 		section = display,
-		position = 14
+		position = 15
 	)
 	default Theme theme()
 	{
