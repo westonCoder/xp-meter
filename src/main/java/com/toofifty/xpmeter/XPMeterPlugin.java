@@ -237,6 +237,7 @@ public class XPMeterPlugin extends Plugin
 		chart.setCurrentTick(tracker.getCurrentTick());
 		chart.setPauses(tracker.getPauses());
 		chart.setLogouts(tracker.getLogouts());
+		chart.setLevelUps(tracker.getLevelUps());
 		chart.setPerformance(tracker.getPerformance());
 	}
 

@@ -40,6 +40,16 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	private static final Color LOGOUT_MARKER_COLOR = new Color(255, 68, 0, 128);
 	private static final Color CURSOR_MARKER_COLOR = new Color(255, 255, 255, 128);
 
+	private float levelUpMarkerHue = 0.0f;
+
+	private Color LEVEL_UP_MARKER_COLOR()
+	{
+		levelUpMarkerHue = (levelUpMarkerHue + 0.005f) % 1.0f;
+
+		Color color = Color.getHSBColor(levelUpMarkerHue, 1.0f, 1.0f);
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), 128);
+	}
+
 	@Setter private SkillIconManager skillIconManager;
 
 	// incoming data
@@ -54,6 +64,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	@Setter private int currentTick = 0;
 	@Setter private Set<Integer> pauses = null;
 	@Setter private Set<Integer> logouts = null;
+	@Setter private Set<Integer> levelUps = null;
 
 	@Setter private XPTracker.Performance performance;
 
@@ -133,6 +144,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 		drawHistoryPlot();
 		drawCurrentRates();
 		drawPauses();
+		drawLevelUps();
 		drawPerformance();
 		drawMouseOver();
 
@@ -484,6 +496,19 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 		setColor(LOGOUT_MARKER_COLOR);
 		for (var tick : logouts)
+		{
+			final var x = mapX(tick);
+			if (x >= 0)
+			{
+				drawVMarker(x);
+			}
+		}
+	}
+
+	public void drawLevelUps()
+	{
+		setColor(LEVEL_UP_MARKER_COLOR());
+		for (var tick : levelUps)
 		{
 			final var x = mapX(tick);
 			if (x >= 0)
