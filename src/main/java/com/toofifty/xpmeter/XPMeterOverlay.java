@@ -135,6 +135,7 @@ public class XPMeterOverlay extends OverlayPanel
 		if (chart.hasData())
 		{
 			chart.setScreenY(getBounds().y);
+			chart.setScreenX(getBounds().x);
 			chart.setChartHeight(config.chartHeight());
 			panelComponent.getChildren().add(chart);
 		}
