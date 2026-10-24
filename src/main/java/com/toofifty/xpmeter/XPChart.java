@@ -84,6 +84,7 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	private final Client client;
 	private final int significantRightMarginChangePositive = 4;
 	private final int significantRightMarginChangeNegative = -16;
+	private int screenX;
 	private int screenY;
 	private Skill hoveredSkill = null;
 	private int lastRightMarginWidth = 0;
@@ -269,7 +270,10 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 
 	private boolean isMouseOnRightSide(int mouseX)
 	{
-		return mouseX > size.width / 2;
+		final var mouseCenterX = screenX + mouseX;
+		final var screenCenterX = client.getCanvasWidth() / 2;
+
+		return mouseCenterX > screenCenterX;
 	}
 
 	private int getTooltipX(int mouseX, String label)
@@ -468,6 +472,11 @@ public class XPChart extends XPChartBase implements LayoutableRenderableEntity
 	public void setScreenY(int screenY)
 	{
 		this.screenY = screenY;
+	}
+
+	public void setScreenX(int screenX)
+	{
+		this.screenX = screenX;
 	}
 
 	public void drawPauses()
