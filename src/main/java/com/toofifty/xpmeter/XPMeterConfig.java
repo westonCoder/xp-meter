@@ -391,11 +391,23 @@ public interface XPMeterConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Show Overlay",
+		keyName = "showOverlay",
+		description = "Show the XP Meter Overlay",
+		section = display,
+		position = 3
+	)
+	default boolean showOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		name = "Time labels",
 		keyName = "showTimeLabels",
 		description = "Show time labels on the X axis",
 		section = display,
-		position = 3
+		position = 4
 	)
 	default boolean showTimeLabels()
 	{
@@ -407,7 +419,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showTimeMarkers",
 		description = "Show vertical time marker lines in the chart",
 		section = display,
-		position = 4
+		position = 5
 	)
 	default boolean showTimeMarkers()
 	{
@@ -419,7 +431,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showXpLabels",
 		description = "Show XP labels on the Y axis",
 		section = display,
-		position = 5
+		position = 6
 	)
 	default boolean showXpLabels()
 	{
@@ -431,7 +443,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showXpMarkers",
 		description = "Show horizontal XP marker lines in the chart",
 		section = display,
-		position = 6
+		position = 7
 	)
 	default boolean showXpMarkers()
 	{
@@ -443,7 +455,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showCurrentRates",
 		description = "Show current XP rates at the end of each line",
 		section = display,
-		position = 7
+		position = 8
 	)
 	default boolean showCurrentRates()
 	{
@@ -455,7 +467,7 @@ public interface XPMeterConfig extends Config
 		keyName = "stackCurrentRates",
 		description = "Prevent rates from overlapping",
 		section = display,
-		position = 8
+		position = 9
 	)
 	default boolean stackCurrentRates()
 	{
@@ -467,7 +479,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showSkillIcons",
 		description = "Show mini skill icons at the end of each line",
 		section = display,
-		position = 9
+		position = 10
 	)
 	default boolean showSkillIcons()
 	{
@@ -479,7 +491,7 @@ public interface XPMeterConfig extends Config
 		keyName = "longFormatNumbers",
 		description = "Show all rates in a longer format. e.g. 69,420 instead of 69K, or 1,200K instead of 1M",
 		section = display,
-		position = 10
+		position = 11
 	)
 	default boolean longFormatNumbers()
 	{
@@ -491,7 +503,7 @@ public interface XPMeterConfig extends Config
 		keyName = "hideNoXP",
 		description = "Hide widget when no XP data is present",
 		section = display,
-		position = 11
+		position = 12
 	)
 	default boolean hideNoXP()
 	{
@@ -503,7 +515,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showLevelProgressBars",
 		description = "Show level progress when current rates or skill icons are present",
 		section = display,
-		position = 12
+		position = 13
 	)
 	default boolean showLevelProgressBars()
 	{
@@ -515,7 +527,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showTimeToLevel",
 		description = "Show time to level on hover when tooltip is present",
 		section = display,
-		position = 13
+		position = 14
 	)
 	default boolean showTimeToLevel()
 	{
@@ -527,7 +539,7 @@ public interface XPMeterConfig extends Config
 		keyName = "showCurrentLevel",
 		description = "Show current level on hover when tooltip is present",
 		section = display,
-		position = 14
+		position = 15
 	)
 	default boolean showCurrentLevel()
 	{
@@ -539,7 +551,7 @@ public interface XPMeterConfig extends Config
 		keyName = "theme",
 		description = "Change the appearance of the overlay",
 		section = display,
-		position = 15
+		position = 16
 	)
 	default Theme theme()
 	{

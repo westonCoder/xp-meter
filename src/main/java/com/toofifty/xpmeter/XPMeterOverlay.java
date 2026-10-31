@@ -86,6 +86,23 @@ public class XPMeterOverlay extends OverlayPanel
 			}
 		);
 
+		removeMenuEntry(MenuAction.RUNELITE_OVERLAY, "Hide", "XP Meter");
+		if (config.showOverlay())
+		{
+			addMenuEntry(
+				MenuAction.RUNELITE_OVERLAY,
+				"Hide",
+				"XP Meter",
+				e -> {
+					configManager.setConfiguration(
+						XPMeterConfig.GROUP_NAME,
+						"showOverlay",
+						false
+					);
+				}
+			);
+		}
+
 		removeMenuEntry(MenuAction.RUNELITE_OVERLAY, "Export data", "XP Meter");
 		removeMenuEntry(MenuAction.RUNELITE_OVERLAY, "Restore data", "XP Meter");
 
@@ -132,7 +149,12 @@ public class XPMeterOverlay extends OverlayPanel
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (chart.hasData())
+		if (!config.showOverlay())
+		{
+			isMouseOver = false;
+			return new Dimension(0, 0);
+		}
+		else if (chart.hasData())
 		{
 			chart.setScreenY(getBounds().y);
 			chart.setScreenX(getBounds().x);
